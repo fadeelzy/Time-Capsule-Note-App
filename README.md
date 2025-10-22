@@ -71,7 +71,6 @@ cd time-capsule-note-app
 2️⃣ Create and activate a virtual environment
 python -m venv venv
 venv\Scripts\activate      # On Windows
-# OR
 source venv/bin/activate   # On Mac/Linux
 
 3️⃣ Install dependencies
