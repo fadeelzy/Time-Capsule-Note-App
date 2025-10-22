@@ -28,7 +28,10 @@ Frontend	HTML, CSS, Vanilla JS
 Authentication	Django Auth
 Deployment (optional)	Render / AWS Elastic Beanstalk / Docker
 Version Control	Git + GitHub
+
+
 🧱 Project Structure
+
 noteproject/
 │
 ├── myapp/
@@ -57,6 +60,8 @@ noteproject/
 ├── .gitignore
 ├── manage.py
 └── README.md
+
+
 
 ⚙️ Setup & Installation
 1️⃣ Clone the repository
