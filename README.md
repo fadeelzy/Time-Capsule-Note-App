@@ -90,6 +90,7 @@ noteproject/
 │   ├── urls.py
 
 │   └── wsgi.py
+
 │
 ├── .env
 
