@@ -12,58 +12,97 @@ Built for precision and reliability, this project demonstrates secure data handl
 🧩 Features
 
 ✅ User Authentication – Secure signup/login system using Django’s built-in auth.
+
 ✅ Create Time Capsules – Write notes with a title, message, and future release date.
+
 ✅ Automatic Unlocking – Notes remain hidden until the set date/time.
+
 ✅ Dashboard Overview – View all notes with locked/unlocked states.
+
 ✅ Responsive UI – Modern interface powered by clean, adaptive CSS.
+
 ✅ PostgreSQL Integration – Optimized relational database with migration-ready structure.
+
 ✅ Timezone-Aware Scheduling – Prevents premature unlocking with precise timezone handling.
+
 ✅ Production-Ready Settings – Easily configurable .env file for secure credentials.
 
+
 🛠️ Tech Stack
+
 Layer	Technology
+
 Backend	Django 5, Python 3.13
+
 Database	PostgreSQL
+
 Frontend	HTML, CSS, Vanilla JS
+
 Authentication	Django Auth
+
 Deployment (optional)	Render / AWS Elastic Beanstalk / Docker
+
 Version Control	Git + GitHub
 
 
 🧱 Project Structure
 
 noteproject/
+
 │
 ├── myapp/
+
 │   ├── templates/
+
 │   │   ├── landing.html
+
 │   │   ├── login.html
+
 │   │   ├── signup.html
+
 │   │   ├── dashboard.html
+
 │   │   ├── add-note.html
+
 │   │   └── note-details.html
+
 │   ├── static/
+
 │   │   ├── style.css
+
 │   │   ├── app.js
+
 │   │   └── note-details.js
+
 │   ├── views.py
+
 │   ├── models.py
+
 │   ├── urls.py
+
 │   └── forms.py
+
 │
 ├── noteproject/
+
 │   ├── settings.py
+
 │   ├── urls.py
+
 │   └── wsgi.py
 │
 ├── .env
+
 ├── .gitignore
+
 ├── manage.py
+
 └── README.md
 
 
 
 ⚙️ Setup & Installation
+
 1️⃣ Clone the repository
 git clone https://github.com/<your-username>/time-capsule-note-app.git
 cd time-capsule-note-app
@@ -110,8 +149,7 @@ python manage.py migrate
 python manage.py runserver
 
 
-Then open http://127.0.0.1:8000/
- in your browser.
+Then open http://127.0.0.1:8000/ in your browser.
 
 🔒 Environment & Security Notes
 
@@ -136,6 +174,7 @@ Add Docker + CI/CD pipelines for automated deployments
 👨‍💻 Author
 
 Fadilah Abdulkadir
+
 🏗️ Site Reliability Engineer | AWS Cloud Solutions Architect | Backend Developer
 
 📧 [fadeelzy@gmail.com]
