@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Note - Time Capsule Notes</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="min-h-screen bg-background">
+        <!-- Header -->
+        <header class="bg-card border-b border-border">
+            <div class="page-container">
+                <div class="content-wrapper">
+                    <div class="flex items-center justify-between py-6">
+                        <div class="flex items-center space-x-4">
+                            <a href="{% url 'dashboard' %}" class="btn btn-ghost p-2">
+                                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                            </a>
+                            <div>
+                                <h1 class="text-xl font-bold text-foreground">Create New Note</h1>
+                                <p class="text-sm text-muted-foreground">Write a message to your future self</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="page-container py-2">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="page-container py-8">
+            <div class="content-wrapper max-w-2xl mx-auto">
+                <div class="note-card">
+                    <form method="POST" class="space-y-6">
+                        {% csrf_token %}
+                        <div class="space-y-2">
+                            <label for="title" class="label">Note Title</label>
+                            <input id="title" name="title" type="text" placeholder="Give your note a memorable title" class="input" required />
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="content" class="label">Your Message</label>
+                            <textarea id="content" name="content" rows="8" placeholder="Write your message to the future..." class="textarea" required></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="releaseDate" class="label">Release Date</label>
+                                <input id="releaseDate" name="releaseDate" type="date" class="input" required />
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="releaseTime" class="label">Release Time</label>
+                                <input id="releaseTime" name="releaseTime" type="time" class="input" required />
+                            </div>
+                        </div>
+
+                        <div class="bg-muted/50 p-4 rounded-lg">
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="info" class="w-5 h-5 text-primary mt-0.5"></i>
+                                <div>
+                                    <h4 class="font-medium text-foreground mb-1">Time Capsule Preview</h4>
+                                    <p class="text-sm text-muted-foreground" id="releasePreview">
+                                        Select a date and time to see when your note will be revealed
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                            <button type="submit" class="btn btn-primary flex-1">
+                                <i data-lucide="lock" class="w-4 h-4 mr-2"></i>
+                                Create Time Capsule
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="{% static 'add-note.js' %}"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

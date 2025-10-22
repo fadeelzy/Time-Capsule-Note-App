@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Capsule Notes - Write Messages to Your Future Self</title>
+    <meta name="description" content="Create time-locked notes that reveal themselves on scheduled dates. Write messages to your future self with Time Capsule Notes.">
+    <meta name="author" content="Time Capsule Notes">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="min-h-screen bg-background">
+        <!-- Hero Section -->
+        <div class="relative overflow-hidden">
+            <div class="page-container">
+                <div class="content-wrapper text-center py-20">
+                    <!-- Logo -->
+                    <div class="flex items-center justify-center w-20 h-20 bg-primary/10 rounded-full mx-auto mb-8">
+                        <i data-lucide="lock" class="w-10 h-10 text-primary"></i>
+                    </div>
+                    
+                    <!-- Heading -->
+                    <h1 class="text-5xl md:text-6xl font-bold text-foreground mb-6">
+                        Time Capsule Notes
+                    </h1>
+                    <p class="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                        Write messages to your future self. Create notes that unlock only when the time is right.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    {% if user.is_authenticated %}
+                        <div class="flex justify-center mb-16">
+                            <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                                Go to Dashboard
+                                <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+                                <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+                                Get Started
+                            </a>
+                            <a href="{% url 'login' %}" class="btn btn-outline btn-lg">
+                                Sign In
+                                <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="page-container pb-20">
+            <div class="content-wrapper">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="note-card text-center">
+                        <div class="card-header">
+                            <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-full mx-auto mb-4">
+                                <i data-lucide="lock" class="w-6 h-6 text-primary"></i>
+                            </div>
+                            <h3 class="card-title">Time-Locked Notes</h3>
+                        </div>
+                        <div class="card-content">
+                            <p class="text-muted-foreground">
+                                Your notes remain sealed until their scheduled release date, creating anticipation and reflection.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="note-card text-center">
+                        <div class="card-header">
+                            <div class="flex items-center justify-center w-12 h-12 bg-secondary/10 rounded-full mx-auto mb-4">
+                                <i data-lucide="calendar" class="w-6 h-6 text-secondary"></i>
+                            </div>
+                            <h3 class="card-title">Schedule Reveals</h3>
+                        </div>
+                        <div class="card-content">
+                            <p class="text-muted-foreground">
+                                Set any future date and time for your notes to be revealed. Perfect for goals, memories, and milestones.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="note-card text-center">
+                        <div class="card-header">
+                            <div class="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-full mx-auto mb-4">
+                                <i data-lucide="plus" class="w-6 h-6 text-accent"></i>
+                            </div>
+                            <h3 class="card-title">Simple & Beautiful</h3>
+                        </div>
+                        <div class="card-content">
+                            <p class="text-muted-foreground">
+                                Clean, intuitive interface that makes creating and managing your time capsule notes effortless.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer CTA -->
+                <div class="text-center mt-20">
+                    {% if user.is_authenticated %}
+                        <h2 class="text-3xl font-bold text-foreground mb-4">
+                            Welcome back, {{ user.first_name|default:user.username }}!
+                        </h2>
+                        <p class="text-muted-foreground mb-8">
+                            Access your dashboard to view your time-locked notes.
+                        </p>
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                            Go to Dashboard
+                            <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                        </a>
+                    {% else %}
+                        <h2 class="text-3xl font-bold text-foreground mb-4">
+                            Ready to start your time capsule journey?
+                        </h2>
+                        <p class="text-muted-foreground mb-8">
+                            Create your first note today and discover the magic of messages from your past self.
+                        </p>
+                        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+                            Create Your First Note
+                            <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

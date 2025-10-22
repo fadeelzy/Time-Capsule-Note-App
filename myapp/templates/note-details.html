@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ note.title }} - Time Capsule Notes</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="bg-card border-b border-border">
+        <div class="page-container">
+            <div class="content-wrapper">
+                <div class="flex items-center justify-between py-6">
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'dashboard' %}" class="btn btn-ghost p-2">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </a>
+                        <div>
+                            <h1 class="text-xl font-bold text-foreground">{{ note.title }}</h1>
+                            <p class="text-sm text-muted-foreground">
+                                {% if is_unlocked %}
+                                    Time capsule opened!
+                                {% else %}
+                                    Time capsule sealed
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="page-container py-8">
+        <div class="content-wrapper max-w-2xl mx-auto">
+            
+            <!-- Locked State -->
+            {% if not is_unlocked %}
+            <div id="lockedContent" class="note-card text-center py-12">
+                <div class="flex items-center justify-center w-16 h-16 bg-locked/10 rounded-full mx-auto mb-6">
+                    <i data-lucide="lock" class="w-8 h-8 text-locked"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-foreground mb-4">Time Capsule Sealed</h2>
+                <p class="text-muted-foreground mb-6">This note is locked until its release date</p>
+
+                <div class="bg-locked/5 border border-locked/20 rounded-lg p-6 mb-6">
+                    <h3 class="font-semibold text-foreground mb-3">Release Information</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Release Date:</span>
+                            <span class="font-medium" id="lockedReleaseDate">
+                                {{ note.release_date|date:"M d, Y H:i" }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Time Remaining:</span>
+                            <span class="font-medium countdown-timer" 
+                                  id="countdown" 
+                                  data-release-date="{{ note.release_date|date:'Y-m-d H:i:s' }}">
+                                {{ time_remaining }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs text-muted-foreground">
+                    Your message will be revealed when the time arrives.
+                </p>
+            </div>
+            {% else %}
+            <!-- Unlocked State -->
+            <div id="unlockedContent" class="note-card">
+                <div class="flex items-center justify-center w-16 h-16 bg-unlocked/10 rounded-full mx-auto mb-6">
+                    <i data-lucide="unlock" class="w-8 h-8 text-unlocked"></i>
+                </div>
+
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-foreground mb-2">Time Capsule Opened!</h2>
+                    <p class="text-muted-foreground">Your message from the past has been revealed</p>
+                </div>
+
+                <div class="bg-unlocked/5 border border-unlocked/20 rounded-lg p-6 mb-6">
+                    <h3 class="font-semibold text-foreground mb-3">Message Details</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Created:</span>
+                            <span class="font-medium">{{ note.created_at|date:"M d, Y H:i" }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Released:</span>
+                            <span class="font-medium">{{ note.release_date|date:"M d, Y H:i" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-card to-muted/20 border border-border rounded-lg p-6">
+                    <h3 class="font-semibold text-foreground mb-4">Your Message:</h3>
+                    <div class="prose prose-sm max-w-none">
+                        <p class="text-foreground whitespace-pre-wrap">{{ note.content }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="{% static 'app.js' %}"></script>
+<script src="{% static 'note-details.js' %}"></script>
+<script>
+    lucide.createIcons();
+</script>
+</body>
+</html>
