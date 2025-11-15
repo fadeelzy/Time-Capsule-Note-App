@@ -1,32 +1,18 @@
-// App.js - Main application logic and utilities
+// app.js — Main app utilities (Django-compatible)
 
-// Navigation function
-function navigateTo(page) {
-    window.location.href = page;
-}
 
-// Authentication check
-function checkAuth() {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    if (!isAuthenticated) {
-        navigateTo('login.html');
-        return false;
+function navigateTo(urlName) {
+    // Accept either full URL or relative Django URL
+    if (urlName.startsWith('http') || urlName.startsWith('/')) {
+        window.location.href = urlName;
+    } else {
+        window.location.href = `/${urlName}`;
     }
-    return true;
 }
 
-// Logout function
-function logout() {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
-    showToast('Logged out successfully', 'success');
-    setTimeout(() => {
-        navigateTo('landing.html');
-    }, 1000);
-}
-
-// Toast notification system
+// ============================
+// 🔹 Toast notification system
+// ============================
 function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
     if (!toast) return;
@@ -40,124 +26,104 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// Generate unique ID
-function generateId() {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+// ============================
+// 🔹 Logout handler (server-side)
+// ============================
+function logout() {
+    fetch('/logout/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                showToast('Logged out successfully', 'success');
+                setTimeout(() => {
+                    navigateTo('/login/');
+                }, 1000);
+            } else {
+                showToast('Logout failed. Try again.', 'error');
+            }
+        })
+        .catch(() => {
+            showToast('An error occurred during logout.', 'error');
+        });
 }
 
-// Format date for display
+// ============================
+// 🔹 Utility Functions
+// ============================
+
+// CSRF Token helper (for Django POST requests)
+function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const trimmed = cookie.trim();
+        if (trimmed.startsWith(name + '=')) {
+            return trimmed.substring(name.length + 1);
+        }
+    }
+    return '';
+}
+
+// Date formatting
 function formatDate(dateString) {
+    if (!dateString) return '-';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
     });
 }
 
-// Calculate time remaining
+// Countdown calculation (for locked notes)
 function getTimeRemaining(targetDate) {
     const now = new Date().getTime();
     const target = new Date(targetDate).getTime();
-    const difference = target - now;
+    const diff = target - now;
 
-    if (difference < 0) {
-        return 'Unlocked';
-    }
+    if (diff < 0) return 'Unlocked';
 
-    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-    if (days > 0) {
-        return `${days}d ${hours}h ${minutes}m`;
-    } else if (hours > 0) {
-        return `${hours}h ${minutes}m`;
-    } else {
-        return `${minutes}m`;
-    }
+    if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
 }
 
-// Check if note is unlocked
-function isNoteUnlocked(releaseDate) {
-    return new Date() >= new Date(releaseDate);
-}
-
-// Notes storage functions
-function getNotes() {
-    const notes = localStorage.getItem('timeCapsuleNotes');
-    return notes ? JSON.parse(notes) : [];
-}
-
-function saveNotes(notes) {
-    localStorage.setItem('timeCapsuleNotes', JSON.stringify(notes));
-}
-
-function getNoteById(id) {
-    const notes = getNotes();
-    return notes.find(note => note.id === id);
-}
-
-// Get URL parameters
-function getUrlParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
-// Validate email format
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Validate date is in the future
-function isFutureDate(dateString) {
-    return new Date(dateString) > new Date();
-}
-
-// Initialize page
-function initializePage() {
-    // Set minimum date for date inputs to today
-    const dateInputs = document.querySelectorAll('input[type="date"]');
-    const today = new Date().toISOString().split('T')[0];
-    dateInputs.forEach(input => {
-        input.min = today;
-    });
-
-    // Initialize Lucide icons if available
+// Initialize Lucide icons
+function initializeIcons() {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
 }
 
-// DOM ready function
-function domReady(fn) {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', fn);
-    } else {
-        fn();
+// Initialize all when DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    initializeIcons();
+
+    // Optional: Automatically attach logout handler to button
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
     }
-}
+});
 
-// Initialize when DOM is ready
-domReady(initializePage);
-
-// Export functions for use in other files (if needed)
+// ============================
+// 🔹 Export for global use
+// ============================
 window.appUtils = {
     navigateTo,
-    checkAuth,
-    logout,
     showToast,
-    generateId,
+    logout,
     formatDate,
     getTimeRemaining,
-    isNoteUnlocked,
-    getNotes,
-    saveNotes,
-    getNoteById,
-    getUrlParameter,
-    isValidEmail,
-    isFutureDate
+    getCSRFToken,
 };

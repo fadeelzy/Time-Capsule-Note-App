@@ -26,16 +26,25 @@
                     <h2 class="card-title">Sign In</h2>
                 </div>
                 <div class="card-content">
-                    <form id="loginForm" class="space-y-4">
+                    {% if messages %}
+                        <div class="mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="POST" class="space-y-4">
+                        {% csrf_token %}
                         <div class="space-y-2">
-                            <label for="email" class="label">Email</label>
+                            <label for="username" class="label">Username</label>
                             <div class="relative">
                                 <i data-lucide="mail" class="absolute left-3 top-3 h-4 w-4 text-muted-foreground"></i>
                                 <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="Enter your email"
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    placeholder="Enter your username"
                                     class="input pl-10"
                                     required
                                 />
@@ -54,24 +63,17 @@
                                     class="input pl-10 pr-10"
                                     required
                                 />
-                                <button
-                                    type="button"
-                                    id="togglePassword"
-                                    class="absolute right-1 top-1 h-8 w-8 p-0 btn btn-ghost"
-                                >
-                                    <i data-lucide="eye" class="h-4 w-4"></i>
-                                </button>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-full" id="submitBtn">
+                        <button type="submit" class="btn btn-primary w-full">
                             Sign In
                         </button>
                     </form>
 
                     <div class="mt-6 text-center">
                         <p class="text-sm text-muted-foreground">
-                            Don't have an account?
+                            Don’t have an account?
                             <a href="{% url 'signup' %}" class="text-primary hover:underline font-medium">
                                 Sign up
                             </a>
@@ -79,21 +81,10 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Demo Note -->
-            <div class="mt-6 text-center">
-                <p class="text-xs text-muted-foreground">
-                    Demo: Use any email and password to sign in
-                </p>
-            </div>
         </div>
     </div>
 
-    <div id="toast" class="toast hidden"></div>
-
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="app.js"></script>
-    <script src="login.js"></script>
     <script>
         lucide.createIcons();
     </script>
