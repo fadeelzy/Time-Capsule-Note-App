@@ -34,7 +34,7 @@ Layer	Technology
 
 Backend	Django 5, Python 3.13
 
-Database	PostgreSQL
+Database - PostgreSQL (Aiven)
 
 Frontend	HTML, CSS, Vanilla JS
 
